@@ -1,24 +1,32 @@
 import './weathercard.css'
 import search_icon from "../assets/search.png"
-import clear_icon from "../assets/clear.png"
-import cloud_icon from "../assets/cloud.png"
-import drizzle_icon from "../assets/drizzle.png"
-import humidity_icon from "../assets/humidity.png"
-import rain_icon from "../assets/rain.png"
-import snow_icon from "../assets/snow.png"
+import { useEffect, useState } from 'react'
 import wind_icon from "../assets/wind.png"
-import { useEffect } from 'react'
+import humidity_icon from "../assets/humidity.png"
+import { icons } from '../weather_icons/icons'
 
 export default function WeatherCard() {
 
+    const [weatherData, setWeatherData] = useState(false)
+
+
+
     const search = async (city) => {
         try {
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${import.meta.env.VITE_APP_ID}`
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}`
 
             const res = await fetch(url)
             const data = await res.json()
 
-            console.log(data)
+            const icon = icons[data.weather[0].icon] || icons['01d']
+
+            setWeatherData({
+                humidity: data.main.humidity,
+                windSpeed: data.wind.speed,
+                temperature: Math.floor(data.main.temp),
+                location: data.name,
+                icon: icon
+            })
 
         } catch (error) {
             console.error(error.message)
@@ -26,7 +34,7 @@ export default function WeatherCard() {
     }
 
     useEffect(() => {
-        search("London")
+        search("Moscow")
     }, [])
 
     return (
@@ -36,22 +44,22 @@ export default function WeatherCard() {
                 <img src={search_icon} alt="" />
             </div>
 
-            <img src={clear_icon} alt="" className='weather-icon' />
-            <p className='temp'>16ºC</p>
-            <p className='loc'>London</p>
+            <img src={weatherData.icon} alt="" className='weather-icon' />
+            <p className='temp'>{weatherData.temperature}ºC</p>
+            <p className='loc'>{weatherData.location}</p>
 
             <div className="data">
                 <div className="col">
                 <img src={humidity_icon} alt="" />
                     <div>
-                        <p>91%</p>
+                        <p>{weatherData.humidity}%</p>
                         <span>Humidity</span>
                     </div>
                 </div>
                 <div className="col">
                     <img src={wind_icon} alt="" />
                     <div>
-                        <p>3.6 km/h</p>
+                        <p>{weatherData.windSpeed} Km/h</p>
                         <span>Wind Speed</span>
                     </div>
                 </div>
