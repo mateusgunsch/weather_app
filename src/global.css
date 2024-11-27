@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
-    background-color: rgb(92, 89, 252);
+    font-family: "Roboto", sans-serif;
+}
+
+.app {
+    min-height: 100vh;
+    display: grid;
+    background-color: rgb(167, 165, 255);
 }
