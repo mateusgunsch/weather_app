@@ -7,8 +7,28 @@ import humidity_icon from "../assets/humidity.png"
 import rain_icon from "../assets/rain.png"
 import snow_icon from "../assets/snow.png"
 import wind_icon from "../assets/wind.png"
+import { useEffect } from 'react'
 
 export default function WeatherCard() {
+
+    const search = async (city) => {
+        try {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${import.meta.env.VITE_APP_ID}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+
+            console.log(data)
+
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
+    useEffect(() => {
+        search("London")
+    }, [])
+
     return (
         <div className="weather">
             <div className="search-bar">
